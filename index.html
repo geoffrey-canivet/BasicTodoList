@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Todolist</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <!-- <link href="appLaurent.css" rel="stylesheet"> -->
+  </head>
+  <body>
+    <style>
+      body {
+        background-color: #f0f2f5;
+
+      }
+      h6 {
+        margin-bottom: 0;
+      }
+      .card {
+        position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #e3e6f0;
+    border-radius: 0.35rem;
+    color: #363d47;
+    box-shadow: 0px 10px 13px -12px #00000020, 5px 5px 15px 5px rgba(0,0,0,0);
+      }
+      .card-header {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0;
+    padding-top: none;
+    border-bottom: 1px solid #e3e6f0;
+    background-color: #f7f7f7ff;
+    color: #363d47;
+
+      }
+      .float-right {
+        float: right!important;
+      }
+      i { 
+        margin-left: 10px;
+        cursor: pointer;
+      }
+      .fa-ellipsis-vertical {
+        color: #363d479d;
+        cursor: pointer;
+      }
+      .fa-ellipsis-vertical:hover {
+        color: #363d47;
+      }
+      .fa-xmark {
+        color: #363d479d;
+        cursor: pointer;
+      }
+      .fa-xmark:hover {
+        color: #363d47;
+      }
+      .fa-square-plus {
+        color: #363d479d;
+        cursor: pointer;
+      }
+      .fa-square-plus:hover {
+        color: #363d47;
+      }
+      .bord {
+        border: 1px solid #e3e6f0;
+        padding: 10px;
+      }
+      .bord-ajouter {
+        border: 1px solid #e3e6f0;
+        padding: 5px;
+      }
+      .bord-ajouter a {
+        padding: 0;
+      }
+      .btn-block {
+    display: block;
+    width: 100%;
+}
+.btn-new-card {
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: rgb(255, 255, 255);
+    color: #363d47;
+    border: 1px solid #e3e6f0;
+    box-shadow: 0px 10px 13px -12px #00000020, 5px 5px 15px 5px rgba(0,0,0,0);
+}
+.container {
+  margin-top: 70px;
+}
+.navbar {
+  background-color: white;
+  box-shadow: 0px 10px 13px -12px #00000020, 5px 5px 15px 5px rgba(0,0,0,0);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 30px;
+}
+.setting {
+  padding-right: 30px;
+}
+    </style>
+<nav class="navbar fixed-top">
+  <h1 class="navbar-brand" href="#">ToDoList</h1><span class="setting"><i class="fa-solid fa-gear"></i></span>
+  <!-- <span>ico ajouter liste</span><span>ico avatar, - sous btn - effacer toutes les listes, deconnexion</span> -->
+</nav>
+
+<div class="container">
+  <di class="btn-ac">
+    <h1 class="btn btn-lg btn-new-card rounded-2 mb-4" id="creatNewlist">Ajouter une liste</h1>
+  </di>
+    
+
+
+  <main>
+    <div class="row row-cols-1 row-cols-md-3">
+
+    </div>
+
+  </main>
+
+
+</div>
+
+<script>
+  // Attendez que le document HTML soit complètement chargé
+  document.addEventListener("DOMContentLoaded", function () {
+    // Récupérez le bouton avec l'ID "creatNewlist"
+    const creatNewlistButton = document.getElementById("creatNewlist");
+  
+    // Ajoutez un écouteur d'événements au bouton "creatNewlist"
+    creatNewlistButton.addEventListener("click", function () {
+      // Créez un nouvel élément de carte en appelant la fonction createCard()
+      const newCard = createCard();
+  
+      // Récupérez la rangée (row) avec la classe "row-cols-1.row-cols-md-3"
+      const row = document.querySelector(".row-cols-1.row-cols-md-3");
+  
+      // Ajoutez le nouvel élément de carte à la rangée
+      row.appendChild(newCard);
+  
+      // Ajouter un écouteur d'événements au bouton "Ajouter une nouvelle tâche"
+      const newTaskButton = newCard.querySelector(".add-new-tache");
+      newTaskButton.addEventListener("click", function () {
+        // Demandez à l'utilisateur d'entrer le nom d'une tâche
+        const taskText = prompt("Entrez le nom d'une tâche :");
+  
+        // Si l'utilisateur a saisi quelque chose, appelez la fonction addNewTask()
+        if (taskText !== null) {
+          addNewTask(newCard, taskText);
+        }
+      });
+  
+      // Ajouter un écouteur d'événements au bouton "Supprimer une liste"
+      const deleteButton = newCard.querySelector(".del-card");
+      deleteButton.addEventListener("click", function () {
+        // Supprimez la carte de la rangée
+        row.removeChild(newCard);
+      });
+  
+      // Ajoutez un écouteur d'événements pour modifier le titre de la carte
+      const cardTitle = newCard.querySelector(".titre");
+      cardTitle.addEventListener("click", function () {
+        // Demandez à l'utilisateur de modifier le titre
+        const newTitle = prompt("Modifier le titre de la carte :", cardTitle.textContent);
+        
+        // Si l'utilisateur a saisi quelque chose et n'a pas cliqué sur "Annuler"
+        if (newTitle !== null) {
+          cardTitle.textContent = newTitle;
+        }
+      });
+    });
+  
+    // Fonction pour créer un nouvel élément de carte
+    function createCard() {
+      // Créez un nouvel élément de carte avec du contenu HTML
+      const newCard = document.createElement("div");
+      newCard.className = "col";
+      newCard.innerHTML = `
+        <div class="card rounded-2 mb-4">
+          <div class="card-header d-flex flex-row align-items-center justify-content-between taskItem">
+            </i>  <i class="fa-solid fa-square-plus add-new-tache"></i>
+            <h5 class="m-0 font-weight-bold titre">${getCurrentDate()}</h5>
+            <div>
+              <i class="fa-solid fa-xmark del-card"></i>
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Contenu de la carte -->
+          </div>
+          <div class="card-footer">
+            <!-- Pied de carte -->
+          </div>
+        </div>
+      `;
+      return newCard;
+    }
+  
+    // Fonction pour obtenir la date actuelle au format jj/mm/aaaa
+    function getCurrentDate() {
+      const today = new Date();
+      const day = today.getDate();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      return `${day < 10 ? '0' : ''}${day} / ${month < 10 ? '0' : ''}${month} / ${year}`;
+    }
+  
+    // Fonction pour ajouter une nouvelle tâche à une carte
+    function addNewTask(card, taskText) {
+      // Récupérez le corps de la carte
+      const cardBody = card.querySelector(".card-body");
+      // Créez un nouvel élément de tâche avec du contenu HTML
+      const newTask = document.createElement("h6");
+      newTask.className = "d-flex justify-content-between small font-weight-bold bord task-item ";
+      // Créez un élément de texte pour la tâche et définissez son contenu
+      const taskTextElement = document.createElement("span");
+      taskTextElement.className = "task-text";
+      taskTextElement.textContent = taskText;
+      // Ajoutez l'élément de texte au conteneur de tâche
+      newTask.appendChild(taskTextElement); 
+      // Créez un conteneur pour les icônes
+      const iconsContainer = document.createElement("div"); 
+      iconsContainer.className = "task-icons";
+  
+      // Ajoutez des icônes pour les actions (cocher, décocher, supprimer, éditer)
+      iconsContainer.innerHTML = `
+        <i class="fa-solid fa-square-check fa-lg check"></i>
+        <i class="fa-solid fa-square-minus fa-lg uncheck"></i>
+        <i class="fa-solid fa-square-pen fa-lg edit"></i>
+        <i class="fa-solid fa-rectangle-xmark fa-lg delete"></i>
+      `;
+      // Ajoutez le conteneur d'icônes au conteneur de tâche
+      newTask.appendChild(iconsContainer); 
+      // Ajoutez la tâche au corps de la carte
+      cardBody.appendChild(newTask);
+      // Récupérez les icônes individuelles pour ajouter des écouteurs d'événements
+      const checkIcon = newTask.querySelector(".check");
+      const uncheckIcon = newTask.querySelector(".uncheck");
+      const deleteIcon = newTask.querySelector(".delete");
+      const editIcon = newTask.querySelector(".edit");
+  
+      let isCompleted = false;
+      let isDeleted = false;
+      // Griser/dégriser une tache
+      checkIcon.addEventListener("click", function () {
+        if (!isDeleted) {
+          const taskTextElement = newTask.querySelector(".task-text");
+  
+          if (isCompleted) {
+            taskTextElement.style.color = "#363d47";
+            checkIcon.style.opacity = "1";
+  
+            isCompleted = false;
+          } else {
+            taskTextElement.style.color = "#363d4766";
+            checkIcon.style.opacity = "0.5";
+            isCompleted = true;
+          }
+        }
+      });
+      // Barrer/débarrer une tache
+      uncheckIcon.addEventListener("click", function () {
+        if (!isDeleted) {
+          const taskTextElement = newTask.querySelector(".task-text");
+  
+          if (taskTextElement.style.textDecoration === "line-through") {
+            taskTextElement.style.textDecoration = "none";
+            uncheckIcon.style.opacity = "1";
+          } else {
+            taskTextElement.style.textDecoration = "line-through";
+            uncheckIcon.style.opacity = "0.5";
+          }
+        }
+      });
+      // Supprimer une tache
+      deleteIcon.addEventListener("click", function () {
+        if (!isDeleted) {
+          if (confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
+            cardBody.removeChild(newTask);
+            isDeleted = true;
+          }
+        }
+      });
+      // Modifier une tache
+      editIcon.addEventListener("click", function () {
+        if (!isDeleted) {
+          const newTaskText = prompt("Modifier la tâche :", taskText);
+          if (newTaskText !== null) {
+            taskText = newTaskText;
+            taskTextElement.textContent = newTaskText;
+          }
+        }
+      });
+    }
+  });
+  
+  
+  </script>
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
